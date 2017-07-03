@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "generic-names": "^1.0.2",
+    "postcss": "^6.0.4",
+    "postcss-icss-selectors": "^2.0.3"
+  },
+  "name": "postcss-elm-modules",
+  "version": "0.1.0",
+  "description": "Transpile CSS modules to Elm.",
+  "main": "index.js",
+  "author": "Zach Green",
+  "license": "MIT",
+  "devDependencies": {
+    "postcss-cli": "^4.1.0"
+  },
+  "keywords": [
+    "postcss-plugin",
+    "postcss plugin",
+    "postcss",
+    "elm",
+    "elmlang",
+    "css modules"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zgreen/postcss-elm-modules"
+  },
+  "scripts": {
+    "example": "postcss example-input.css -c postcss.config.js"
+  }
+}
