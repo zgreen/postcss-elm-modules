@@ -5,12 +5,13 @@
     "postcss-icss-selectors": "^2.0.3"
   },
   "name": "postcss-elm-modules",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Transpile CSS modules to Elm.",
   "main": "index.js",
   "author": "Zach Green",
   "license": "MIT",
   "devDependencies": {
+    "jest": "^20.0.4",
     "postcss-cli": "^4.1.0"
   },
   "keywords": [
