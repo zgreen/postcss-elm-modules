@@ -5,12 +5,18 @@
     "postcss-icss-selectors": "^2.0.3"
   },
   "name": "postcss-elm-modules",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Transpile CSS modules to Elm.",
   "main": "index.js",
   "author": "Zach Green",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^4.1.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.6.1",
+    "eslint-plugin-node": "^5.1.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
     "jest": "^20.0.4",
     "postcss-cli": "^4.1.0"
   },
@@ -27,6 +33,8 @@
     "url": "https://github.com/zgreen/postcss-elm-modules"
   },
   "scripts": {
-    "example": "postcss example-input.css -c postcss.config.js"
+    "example": "postcss example-input.css -c postcss.config.js",
+    "lint": "eslint index.js && eslint src/**",
+    "test": "yarn lint && jest"
   }
 }
