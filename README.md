@@ -1,5 +1,8 @@
 # PostCSS Elm Modules
-Transpile CSS modules to Elm.
+
+![Travis build status](https://travis-ci.org/zgreen/postcss-elm-modules.svg?branch=master)
+
+Transpile [CSS modules](https://github.com/css-modules/css-modules) to [Elm](http://elm-lang.org/).
 
 ## Install
 ```bash
@@ -11,7 +14,9 @@ yarn add -D postcss-elm-modules
 ```
 
 ## What does this plugin do?
-This plugin creates valid Elm modules from CSS modules. For example, consider the following CSS module:
+This plugin creates valid Elm modules from CSS modules.
+
+For example, consider the following CSS module:
 
 ### `example.css`
 ```css
@@ -24,7 +29,7 @@ This plugin creates valid Elm modules from CSS modules. For example, consider th
 }
 ```
 
-This plugin will then create an Elm module based on `example.css`, containing a record of the selectors:
+This plugin will then create an Elm module based on `example.css`, containing a record of the selectors and their locally-scoped versions:
 
 ### `Styles.elm`
 
@@ -38,6 +43,25 @@ styles =
     , bar = "file__bar---7FSOM"
     }
 ```
+
+You can then use these selectors much as you would when using CSS modules in JavaScript:
+
+### `Main.elm`
+
+```elm
+module Main exposing (..)
+
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import Styles exposing (styles)
+
+main =
+    h1 [ class (styles.foo ++ " " ++ styles.bar) ] [ text "Hello, World." ]
+```
+
+## Try it out.
+
+An example is available in this repo. Use the command `yarn example` or `npm run example` to try it out.
 
 ## Why?
 
