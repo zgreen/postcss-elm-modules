@@ -1,20 +1,31 @@
-const fs = require("fs");
-const postcss = require("postcss");
-const postcssElmModules = require("../../index");
-const { cssFixtures, elmSingle, runElmModuleTests } = require("../util");
-const { single } = cssFixtures;
+const fs = require('fs')
+const postcss = require('postcss')
+const postcssElmModules = require('../../index')
+const {
+  cssFixtures,
+  elmFixtures,
+  runElmModuleTests,
+  testAndUnlink
+} = require('../util')
+const { atRule, single } = cssFixtures
+const { elmSingle, elmArgsApplied } = elmFixtures
 
-test("The plugin writes an Elm module", () => {
-  postcss([
+function processed (input) {
+  return postcss([
     postcssElmModules({
-      dir: "tests/integration"
+      dir: 'tests/integration'
     })
-  ])
-    .process(single)
-    .then(() => {
-      const path = "tests/integration/Styles.elm";
-      runElmModuleTests(fs.readFileSync(path, "utf8"), elmSingle).then(() => {
-        fs.unlinkSync(path);
-      });
-    });
-});
+  ]).process(input)
+}
+
+test('The plugin writes an Elm module', () => {
+  processed(single).then(
+    testAndUnlink.bind(null, 'tests/integration/Styles.elm', elmSingle)
+  )
+})
+
+test('The plugin writes a custom named module and writes to a custom directory using an atRule.', () => {
+  processed(atRule).then(
+    testAndUnlink.bind(null, 'tests/integration/custom/Foo.elm', elmArgsApplied)
+  )
+})

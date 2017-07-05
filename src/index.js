@@ -36,17 +36,20 @@ function addSelector (selectors, acc, key, idx, arr) {
  * @param {string} oldModuleName The incoming module name.
  * @return {Object} Object containing the module name and root object.
  */
-function applyModuleArgs (oldRoot, oldModuleName) {
+function applyModuleArgs (oldRoot, oldModuleName, oldDir) {
+  let dir = oldDir
   let moduleName = oldModuleName
   let root = oldRoot
   oldRoot.walkAtRules('elmModule', rule => {
     const { params } = rule
     if (params.length) {
-      moduleName = params
+      const atRuleArgs = params.split(' ')
+      dir = atRuleArgs[1]
+      moduleName = atRuleArgs[0].toLowerCase()
       root = rule.parent
     }
   })
-  return { moduleName, root }
+  return { dir, moduleName, root }
 }
 
 /**
@@ -109,11 +112,21 @@ ${moduleName} =
     { `
 }
 
+/**
+ * Run PostCSS and write the Elm module.
+ *
+ * @param {Object} args Function args.
+ * @param {Object} root PostCSS root.
+ * @return {Promise} Promise resolved by the written Elm module.
+ */
 function postcssElm (args, root) {
-  const { dir, cssModules } = args
+  const { cssModules } = args
+  let { dir } = args
   return new Promise(resolve => {
     runPostCss(cssModules).process(root.clone()).then(result => {
-      const { moduleName, root } = applyModuleArgs(result.root, args.moduleName)
+      const updatedArgs = applyModuleArgs(result.root, args.moduleName, dir)
+      const { moduleName, root } = updatedArgs
+      dir = updatedArgs.dir
       const selectors = getSelectors(root, result.messages)
       const fileName = moduleName.charAt(0).toUpperCase() + moduleName.slice(1)
       const elmModule = buildElmModule(selectors, fileName, moduleName)
