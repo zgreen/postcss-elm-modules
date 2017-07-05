@@ -123,15 +123,22 @@ function postcssElm (args, root) {
   const { cssModules } = args
   let { dir } = args
   return new Promise(resolve => {
-    runPostCss(cssModules).process(root.clone()).then(result => {
-      const updatedArgs = applyModuleArgs(result.root, args.moduleName, dir)
-      const { moduleName, root } = updatedArgs
-      dir = updatedArgs.dir
-      const selectors = getSelectors(root, result.messages)
-      const fileName = moduleName.charAt(0).toUpperCase() + moduleName.slice(1)
-      const elmModule = buildElmModule(selectors, fileName, moduleName)
-      resolve(fs.writeFileSync(`${path.join(dir, fileName)}.elm`, elmModule))
-    })
+    runPostCss(cssModules)
+      .process(root.clone())
+      .catch(err => {
+        console.error(err)
+        process.exit(1)
+      })
+      .then(result => {
+        const updatedArgs = applyModuleArgs(result.root, args.moduleName, dir)
+        const { moduleName, root } = updatedArgs
+        dir = updatedArgs.dir
+        const selectors = getSelectors(root, result.messages)
+        const fileName =
+          moduleName.charAt(0).toUpperCase() + moduleName.slice(1)
+        const elmModule = buildElmModule(selectors, fileName, moduleName)
+        resolve(fs.writeFileSync(`${path.join(dir, fileName)}.elm`, elmModule))
+      })
   })
 }
 
