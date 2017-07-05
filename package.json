@@ -1,11 +1,12 @@
 {
   "dependencies": {
+    "chalk": "^2.0.1",
     "generic-names": "^1.0.2",
     "postcss": "^6.0.4",
     "postcss-icss-selectors": "^2.0.3"
   },
   "name": "postcss-elm-modules",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Transpile CSS modules to Elm.",
   "main": "index.js",
   "author": "Zach Green",

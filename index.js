@@ -7,7 +7,8 @@ const defaultArgs = {
     scopePattern: '[name]__[local]---[hash:base64:5]'
   },
   dir: '',
-  moduleName: 'styles'
+  moduleName: 'styles',
+  log: true
 }
 
 module.exports = postcss.plugin('postcss-elm-modules', function (options) {

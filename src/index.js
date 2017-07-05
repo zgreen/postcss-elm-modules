@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { red, green, underline } = require('chalk')
 const genericNames = require('generic-names')
 const postcssCssModules = require('postcss-icss-selectors')
 const postcss = require('postcss')
@@ -120,9 +121,9 @@ ${moduleName} =
  * @return {Promise} Promise resolved by the written Elm module.
  */
 function postcssElm (args, root) {
-  const { cssModules } = args
+  const { cssModules, log } = args
   let { dir } = args
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     runPostCss(cssModules)
       .process(root.clone())
       .catch(err => {
@@ -137,8 +138,46 @@ function postcssElm (args, root) {
         const fileName =
           moduleName.charAt(0).toUpperCase() + moduleName.slice(1)
         const elmModule = buildElmModule(selectors, fileName, moduleName)
-        resolve(fs.writeFileSync(`${path.join(dir, fileName)}.elm`, elmModule))
+        return promiseWriteFile(`${path.join(dir, fileName)}.elm`, elmModule)
       })
+      .catch(err => {
+        return reject(err)
+      })
+      .then(logMsg => {
+        if (log) {
+          resolve(console.log(logMsg))
+        } else {
+          resolve()
+        }
+      })
+  })
+}
+
+/**
+ * Promise-ify a file write, resolved with a message.
+ *
+ * @param {string} filePath The file path to write to.
+ * @param {string} elmModule The Elm module content.
+ * @return {Promise} Promise, resolved with a message.
+ */
+function promiseWriteFile (filePath, elmModule) {
+  return new Promise((resolve, reject) => {
+    if (filePath && elmModule) {
+      fs.writeFileSync(filePath, elmModule)
+      resolve(
+        green.bold(`\n✔ postcss-elm-modules wrote ${underline(filePath)}`)
+      )
+    } else {
+      reject(
+        red.bold(
+          `\n✖ postcss-elm-modules failed to write ${underline(
+            filePath
+          )}, either because either the ${underline(
+            'filePath'
+          )} argument or the ${underline('elmModule')} argument is invalid.`
+        )
+      )
+    }
   })
 }
 
@@ -170,5 +209,6 @@ module.exports = {
   getSelectors,
   opener,
   postcssElm,
+  promiseWriteFile,
   runPostCss
 }
