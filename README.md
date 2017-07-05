@@ -59,10 +59,64 @@ main =
     h1 [ class (styles.foo ++ " " ++ styles.bar) ] [ text "Hello, World." ]
 ```
 
+## Plugin arguments
+
+This plugin takes a single object as an argument, with the following valid properties:
+
+### `cssModules: Object<bool, string>`
+
+- `cssModules.enabled: bool` Enable CSS modules. Default `true`.
+- `cssModules.scopePattern: string` The scoping pattern to use. Default `'[name]__[local]---[hash:base64:5]'`.
+
+### `dir: string`
+
+Directory where the Elm module will be written. Default `''`.
+
+### `log: bool`
+
+Log the output to console. Default `true`.
+
+### `moduleName: string`
+
+The name of the Elm module to write. Default `'styles'`.
+
+#### Example PostCSS config
+
+```js
+module.exports = {
+  plugins: [require('postcss-elm-modules')({
+    cssModules: {
+      enabled: true,
+      scopePattern: '[name]__[local]---[hash:base64:5]'
+    },
+    dir: '',
+    log: true,
+    moduleName: 'styles'
+  })]
+}
+```
+
+## atRule arguments
+
+You may optionally set the `moduleName` and `dir` inline, using an atRule. For example:
+
+```css
+@elmModule Foo src;
+.foo {
+  color: tomato
+}
+
+.bar {
+  color: gold
+}
+```
+
+This will write an Elm module `Foo.elm` at directory `src/`.
+
 ## Try it out.
 
 An example is available in this repo. Use the command `yarn example` or `npm run example` to try it out.
 
-## Why?
+## Justification
 
 If you prefer authoring your styles in CSS rather than in Elm, and if you prefer the scoped selector approach offered by CSS Modules, consider giving this plugin a try.
