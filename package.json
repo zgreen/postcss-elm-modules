@@ -33,7 +33,7 @@
     "url": "https://github.com/zgreen/postcss-elm-modules"
   },
   "scripts": {
-    "example": "postcss example-input.css -c postcss.config.js",
+    "example": "postcss example/foo.css -c example/postcss.config.js",
     "lint": "eslint index.js && eslint src/**",
     "test": "yarn lint && jest"
   }
