@@ -4,6 +4,8 @@
 
 Transpile [CSS modules](https://github.com/css-modules/css-modules) to [Elm](http://elm-lang.org/).
 
+This plugin is useable, but should still be considered a work-in-progress. If you find a bug or have a question, file an issue!
+
 ## Install
 ```bash
 npm install --save-dev postcss-elm-modules
